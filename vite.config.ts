@@ -14,6 +14,7 @@ for (const year of YEARS) {
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/react-salary-diff/',
   plugins: [
     react(),
     {
