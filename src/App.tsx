@@ -53,7 +53,9 @@ function mergeWithDefaults(partial: Partial<FormState>): FormState {
 }
 
 export default function App() {
+
   const urlParams = readURLParams()
+
   const [leftForm, setLeftForm] = useState<FormState>(() => mergeWithDefaults(urlParams.left))
   const [rightForm, setRightForm] = useState<FormState>(() => mergeWithDefaults(urlParams.right))
 

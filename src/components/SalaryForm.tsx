@@ -64,7 +64,7 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
 
   return (
     <div className={`salary-panel ${side}`}>
-      <h3 className="panel-title">{isLeft ? 'Salario A' : 'Salario B'}</h3>
+      <h3 className="panel-title">{isLeft ? 'Salário A' : 'Salário B'}</h3>
 
       {row(
         'Ano',
@@ -80,7 +80,7 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
       )}
 
       {row(
-        'Situacao',
+        'Situação',
         <select
           className="form-select"
           value={form.situation}
@@ -106,7 +106,7 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
       )}
 
       {row(
-        'Salario',
+        'Salário',
         <input
           className="form-input"
           type="number"

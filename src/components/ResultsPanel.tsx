@@ -34,7 +34,7 @@ export function ResultsPanel({
         onClick={() => handleClick(onDoubleClickBlue)}
         onDoubleClick={onDoubleClickBlue}
       >
-        <span className="result-label">Salário Liquido A</span>
+        <span className="result-label">salário líquido A</span>
         <span className="result-value">{leftNet.toFixed(2)} €</span>
       </div>
 
@@ -43,7 +43,7 @@ export function ResultsPanel({
         onClick={() => handleClick(onDoubleClickRed)}
         onDoubleClick={onDoubleClickRed}
       >
-        <span className="result-label">Salário Liquido B</span>
+        <span className="result-label">salário líquido B</span>
         <span className="result-value">{rightNet.toFixed(2)} €</span>
       </div>
 
@@ -53,7 +53,7 @@ export function ResultsPanel({
       </div>
 
       <div className="result-box brown">
-        <span className="result-label">diferenca total</span>
+        <span className="result-label">diferenca bruta</span>
         <span className="result-value">{grossDiff.toFixed(2)} €</span>
       </div>
     </div>
