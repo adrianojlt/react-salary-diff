@@ -19,6 +19,7 @@ body {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 600;
+  color: #222;
 }
 
 /* 3-column grid */
@@ -52,8 +53,8 @@ body {
   font-size: 1.1rem;
   margin: 0 0 1rem 0;
   font-weight: 500;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
-  font-style: italic;
+  font-family: 'Patrick Hand', cursive;
+  color: #222;
 }
 
 /* Form rows */
@@ -76,8 +77,8 @@ body {
   font-size: 0.95rem;
   white-space: nowrap;
   min-width: 90px;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
-  font-style: italic;
+  font-family: 'Patrick Hand', cursive;
+  color: #222;
 }
 
 .salary-panel.left .field-label {
@@ -101,6 +102,7 @@ body {
   border-radius: 6px;
   font-size: 0.9rem;
   background: white;
+  color: #222;
 }
 
 .salary-range {
@@ -156,8 +158,7 @@ body {
   color: rgba(255, 255, 255, 0.9);
   text-transform: lowercase;
   margin-bottom: 0.15rem;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
-  font-style: italic;
+  font-family: 'Patrick Hand', cursive;
 }
 
 .result-box.blue-light {
@@ -175,18 +176,21 @@ body {
 .result-box.white .result-label,
 .result-box.blue-light .result-label,
 .result-box.red-light .result-label {
-  color: #666;
+  color: #222;
 }
 
 .result-value {
   font-size: 1.8rem;
   font-weight: 800;
   color: white;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
+  font-family: 'Patrick Hand', cursive;
 }
 
 .result-value.dark {
   color: #222;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: 'Patrick Hand', cursive;
 }
 
 /* ── Responsive ── */

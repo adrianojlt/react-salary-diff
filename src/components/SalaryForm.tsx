@@ -33,7 +33,7 @@ const DEPENDENT_OPTIONS = [
 export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
   const isLeft = side === 'left'
 
-  const sliderMin = 760
+  const sliderMin = 920
   const sliderMax = isLeft ? 10000 : 7000
   const sliderStep = isLeft ? 20 : 5
 
