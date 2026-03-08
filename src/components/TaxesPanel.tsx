@@ -53,7 +53,7 @@ export function TaxesPanel({ result }: TaxesPanelProps) {
   if (!result) {
     return (
       <div className="pie-chart-wrapper">
-        <svg viewBox="0 0 160 160" width="160" height="160">
+        <svg viewBox="0 0 160 160" width="192" height="192">
           <circle cx="80" cy="80" r="70" fill="#e5e7eb" />
           <circle cx="80" cy="80" r="35" fill="#f8f9fa" />
         </svg>
@@ -92,7 +92,7 @@ export function TaxesPanel({ result }: TaxesPanelProps) {
 
   return (
     <div className="pie-chart-wrapper">
-      <svg viewBox="0 0 160 160" width="160" height="160">
+      <svg viewBox="0 0 160 160" width="192" height="192">
         {arcs}
         <circle cx="80" cy="80" r="35" fill="#f8f9fa" />
       </svg>
