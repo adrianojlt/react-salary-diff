@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { calculateSalary } from 'salario-pt'
 import { SalaryForm } from './components/SalaryForm'
 import { ResultsPanel } from './components/ResultsPanel'
+import { TaxesPanel } from './components/TaxesPanel'
 import type { FormState, SalaryResult } from './types'
 import './App.css'
 
@@ -94,7 +95,10 @@ export default function App() {
     <div className="app-container">
       <h2 className="app-title">Calculo Salário</h2>
       <div className="main-grid">
-        <SalaryForm side="left" form={leftForm} onChange={setLeftForm} />
+        <div className="salary-column">
+          <SalaryForm side="left" form={leftForm} onChange={setLeftForm} />
+          <TaxesPanel side="left" result={leftResult} />
+        </div>
         <ResultsPanel
           leftNet={leftNet}
           rightNet={rightNet}
@@ -103,7 +107,10 @@ export default function App() {
           onDoubleClickBlue={copyLeftToRight}
           onDoubleClickRed={copyRightToLeft}
         />
-        <SalaryForm side="right" form={rightForm} onChange={setRightForm} />
+        <div className="salary-column">
+          <SalaryForm side="right" form={rightForm} onChange={setRightForm} />
+          <TaxesPanel side="right" result={rightResult} />
+        </div>
       </div>
     </div>
   )
