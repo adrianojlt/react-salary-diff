@@ -25,6 +25,20 @@ npm run dev
 
 Open http://localhost:5173 to view the app.
 
+## Deployment
+
+The app is hosted on GitHub Pages at https://adrianojlt.github.io/react-salary-diff.
+
+GitHub Pages serves the static files from the `gh-pages` branch. Deployment is handled in two ways:
+
+**Automatic (GitHub Actions):** Every push to `master` triggers a workflow that builds the project and pushes the output to the `gh-pages` branch automatically.
+
+**Manual:** You can also deploy locally by running:
+```bash
+npm run deploy
+```
+This builds the project and pushes the `dist/` folder to the `gh-pages` branch using the `gh-pages` npm package.
+
 ## Screenshot
 
 ![App Screenshot](screen.png)
