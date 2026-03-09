@@ -14,7 +14,7 @@ A Portuguese salary calculator that compares two different salary scenarios side
 
 - React + TypeScript
 - Vite
-- Portuguese salary calculations: `salario-pt`
+- Portuguese salary calculations node package: [salario](https://github.com/adrianojlt/salario)
 
 ## Getting Started
 
