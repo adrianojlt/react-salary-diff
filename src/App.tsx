@@ -7,9 +7,10 @@ import type { FormState, SalaryResult } from './types'
 import './App.css'
 
 const DEFAULT_FORM: FormState = {
-  situation: '0',
+  situation: 'NotMarried',
   dependents: 0,
   year: '2026',
+  location: 'continente',
   salary: 1000,
 }
 
@@ -19,6 +20,7 @@ function formToResult(form: FormState): SalaryResult | null {
       situation: form.situation,
       numDependents: form.dependents,
       year: form.year,
+      location: form.location,
       salary: form.salary,
     })
   } catch {
@@ -33,12 +35,14 @@ function readURLParams(): { left: Partial<FormState>; right: Partial<FormState> 
       situation: params.get('situation01') ?? undefined,
       dependents: params.has('dependents01') ? parseInt(params.get('dependents01')!, 10) : undefined,
       year: params.get('yearLeft') ?? undefined,
+      location: params.get('location01') ?? undefined,
       salary: params.has('salaryInputLeft') ? parseInt(params.get('salaryInputLeft')!, 10) : undefined,
     },
     right: {
       situation: params.get('situation02') ?? undefined,
       dependents: params.has('dependents02') ? parseInt(params.get('dependents02')!, 10) : undefined,
       year: params.get('yearRight') ?? undefined,
+      location: params.get('location02') ?? undefined,
       salary: params.has('salaryInputRight') ? parseInt(params.get('salaryInputRight')!, 10) : undefined,
     },
   }
@@ -49,6 +53,7 @@ function mergeWithDefaults(partial: Partial<FormState>): FormState {
     situation: partial.situation ?? DEFAULT_FORM.situation,
     dependents: partial.dependents !== undefined && !isNaN(partial.dependents) ? partial.dependents : DEFAULT_FORM.dependents,
     year: partial.year ?? DEFAULT_FORM.year,
+    location: partial.location ?? DEFAULT_FORM.location,
     salary: partial.salary !== undefined && !isNaN(partial.salary) ? partial.salary : DEFAULT_FORM.salary,
   }
 }
@@ -75,11 +80,13 @@ export default function App() {
     params.set('situation01', leftForm.situation)
     params.set('dependents01', String(leftForm.dependents))
     params.set('yearLeft', leftForm.year)
+    params.set('location01', leftForm.location)
     params.set('salaryInputLeft', String(leftForm.salary))
     params.set('salaryRangeLeft', String(leftForm.salary))
     params.set('situation02', rightForm.situation)
     params.set('dependents02', String(rightForm.dependents))
     params.set('yearRight', rightForm.year)
+    params.set('location02', rightForm.location)
     params.set('salaryInputRight', String(rightForm.salary))
     params.set('salaryRangeRight', String(rightForm.salary))
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`

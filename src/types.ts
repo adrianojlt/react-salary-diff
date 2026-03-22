@@ -2,6 +2,7 @@ export interface FormState {
   situation: string
   dependents: number
   year: string
+  location: string
   salary: number
 }
 

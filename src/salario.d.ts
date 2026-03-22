@@ -3,6 +3,7 @@ declare module 'salario-pt' {
     situation: string
     numDependents: number
     year: string
+    location: string
     salary: number
   }
 

@@ -16,9 +16,15 @@ const YEAR_OPTIONS = [
 ]
 
 const SITUATION_OPTIONS = [
-  { value: '0', label: 'Não Casado' },
-  { value: '1', label: 'Casado, 1 titular' },
-  { value: '2', label: 'Casado, 2 titulares' },
+  { value: 'NotMarried', label: 'Não Casado' },
+  { value: 'MarriedOneHolder', label: 'Casado, 1 titular' },
+  { value: 'MarriedTwoHolders', label: 'Casado, 2 titulares' },
+]
+
+const LOCATION_OPTIONS = [
+  { value: 'continente', label: 'Continente' },
+  { value: 'madeira', label: 'Madeira' },
+  { value: 'acores', label: 'Açores' },
 ]
 
 const DEPENDENT_OPTIONS = [
@@ -87,6 +93,19 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
           onChange={e => onChange({ ...form, situation: e.target.value })}
         >
           {SITUATION_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      )}
+
+      {row(
+        'Localização',
+        <select
+          className="form-select"
+          value={form.location}
+          onChange={e => onChange({ ...form, location: e.target.value })}
+        >
+          {LOCATION_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>

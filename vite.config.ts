@@ -5,47 +5,66 @@ import * as path from 'path'
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
+const LOCATIONS = ['continente', 'madeira', 'acores']
 const YEARS = ['2026', '2025', '2024_03', '2024_02', '2024', '2023']
 const csvData: Record<string, string> = {}
-for (const year of YEARS) {
-  const filePath = path.resolve(__dirname, 'node_modules/salario-pt/data', `taxas_continente_${year}.csv`)
-  csvData[year] = fs.readFileSync(filePath, 'utf-8')
+
+for (const location of LOCATIONS) {
+  for (const year of YEARS) {
+    const filePath = path.resolve(__dirname, 'node_modules/salario-pt/data', `taxas_${location}_${year}.csv`)
+    try {
+      csvData[`${location}_${year}`] = fs.readFileSync(filePath, 'utf-8')
+    } catch {
+      csvData[`${location}_${year}`] = ''
+    }
+  }
 }
 
-// https://vite.dev/config/
+const tablesShim = `
+const Papa = require('papaparse');
+const CSV_DATA = ${JSON.stringify(csvData)};
+const LOCATIONS = ${JSON.stringify(LOCATIONS)};
+const YEARS = ${JSON.stringify(YEARS)};
+let cachedTables = null;
+function loadTables(location, year) {
+  if (!cachedTables) {
+    cachedTables = {};
+  }
+  const key = location + '_' + year;
+  if (cachedTables[key]) {
+    return cachedTables[key];
+  }
+  const csv = CSV_DATA[key];
+  if (!csv) {
+    return null;
+  }
+  const results = Papa.parse(csv, { header: true, delimiter: ';' });
+  cachedTables[key] = results.data;
+  return cachedTables[key];
+}
+module.exports = { loadTables, LOCATIONS, YEARS };
+`
+
 export default defineConfig({
   base: '/react-salary-diff/',
   plugins: [
     react(),
     {
       name: 'salario-browser-shim',
+      enforce: 'pre' as const,
       transform(_code: string, id: string) {
-        if (id.includes('salario-pt') && (id.includes('/src/tables.js') || id.includes('\\src\\tables.js'))) {
+        if (id.includes('salario-pt/src/tables.js') || id.endsWith('salario-pt/src/tables.js')) {
           return {
-            code: `
-const Papa = require('papaparse');
-const CSV_DATA = ${JSON.stringify(csvData)};
-const YEARS = ${JSON.stringify(YEARS)};
-let cachedTables = null;
-function loadTables() {
-  if (cachedTables) return cachedTables;
-  cachedTables = {};
-  for (const year of YEARS) {
-    const results = Papa.parse(CSV_DATA[year], { header: true, delimiter: ';' });
-    cachedTables[year] = results.data;
-  }
-  return cachedTables;
-}
-module.exports = { loadTables };
-`,
+            code: tablesShim,
             map: null
           }
         }
+        return null
       }
     }
   ],
   optimizeDeps: {
-    include: ['salario-pt'],
+    include: ['papaparse'],
     esbuildOptions: {
       plugins: [
         {
@@ -54,33 +73,13 @@ module.exports = { loadTables };
             build.onLoad({ filter: /tables\.js$/ }, (args) => {
               if (!args.path.includes('salario-pt')) return undefined
               return {
-                contents: `
-const Papa = require('papaparse');
-const CSV_DATA = ${JSON.stringify(csvData)};
-const YEARS = ${JSON.stringify(YEARS)};
-let cachedTables = null;
-function loadTables() {
-  if (cachedTables) return cachedTables;
-  cachedTables = {};
-  for (const year of YEARS) {
-    const results = Papa.parse(CSV_DATA[year], { header: true, delimiter: ';' });
-    cachedTables[year] = results.data;
-  }
-  return cachedTables;
-}
-module.exports = { loadTables };
-`,
+                contents: tablesShim,
                 loader: 'js'
               }
             })
           }
         }
       ]
-    }
-  },
-  build: {
-    commonjsOptions: {
-      include: [/node_modules/, /salario-pt/]
     }
   }
 })
