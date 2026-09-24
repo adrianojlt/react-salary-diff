@@ -1,4 +1,4 @@
-import { TABLES } from 'salario-pt'
+import { TABLES, type Situation } from 'salario-pt'
 import type { FormState } from '../types'
 
 interface SalaryFormProps {
@@ -29,6 +29,16 @@ const DEPENDENT_OPTIONS = [
   { value: 3, label: '3' },
   { value: 4, label: '4' },
   { value: 5, label: '5 ou mais' },
+]
+
+const MEAL_TYPE_OPTIONS = [
+  { value: 'card', label: 'Cartão' },
+  { value: 'cash', label: 'Dinheiro' },
+]
+
+const IRS_JOVEM_OPTIONS = [
+  { value: 0, label: 'Não' },
+  ...Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: `Ano ${i + 1}` })),
 ]
 
 export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
@@ -85,7 +95,7 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
         <select
           className="form-select"
           value={form.situation}
-          onChange={e => onChange({ ...form, situation: e.target.value })}
+          onChange={e => onChange({ ...form, situation: e.target.value as Situation })}
         >
           {SITUATION_OPTIONS.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -140,6 +150,60 @@ export function SalaryForm({ side, form, onChange }: SalaryFormProps) {
         style={isLeft ? undefined : { transform: 'scaleX(-1)' }}
         onChange={e => onChange({ ...form, salary: parseInt(e.target.value, 10) })}
       />
+
+      <details className="advanced-options">
+        <summary className="field-label">Outras Opções</summary>
+
+        {row(
+          'Sub. Refeição/dia',
+          <input
+            className="form-input"
+            type="number"
+            value={form.mealAmount}
+            min={0}
+            step={0.01}
+            onChange={e => {
+              const num = parseFloat(e.target.value)
+              onChange({ ...form, mealAmount: isNaN(num) ? 0 : num })
+            }}
+          />
+        )}
+
+        {row(
+          'Tipo Refeição',
+          <select
+            className="form-select"
+            value={form.mealType}
+            onChange={e => onChange({ ...form, mealType: e.target.value as FormState['mealType'] })}
+          >
+            {MEAL_TYPE_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        )}
+
+        {row(
+          'IRS Jovem',
+          <select
+            className="form-select"
+            value={form.irsJovemYear}
+            onChange={e => onChange({ ...form, irsJovemYear: parseInt(e.target.value, 10) })}
+          >
+            {IRS_JOVEM_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        )}
+
+        {row(
+          'Duodécimos',
+          <input
+            type="checkbox"
+            checked={form.duodecimos}
+            onChange={e => onChange({ ...form, duodecimos: e.target.checked })}
+          />
+        )}
+      </details>
     </div>
   )
 }

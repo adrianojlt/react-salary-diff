@@ -158,6 +158,19 @@ body {
   cursor: pointer;
 }
 
+.advanced-options {
+  margin-top: 0.75rem;
+}
+
+.advanced-options summary {
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+}
+
+.salary-panel.right .advanced-options summary {
+  text-align: right;
+}
+
 /* ── Results panel ── */
 .results-panel {
   display: flex;

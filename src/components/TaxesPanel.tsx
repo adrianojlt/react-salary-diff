@@ -107,6 +107,13 @@ export function TaxesPanel({ result }: TaxesPanelProps) {
           <span className="pie-legend-label">Salário Líquido</span>
           <span className="pie-legend-value">{fmt(netSalary)} <em>({pct(netSalary, companyMonthlyCost)})</em></span>
         </div>
+        {result.mealAllowance && (
+          <div className="pie-legend-row pie-legend-sub">
+            <span className="pie-swatch" />
+            <span className="pie-legend-label">Sub. Refeição (isento {fmt(result.mealAllowance.exemptAmount)})</span>
+            <span className="pie-legend-value">{fmt(result.mealAllowance.totalMonthly)}</span>
+          </div>
+        )}
         <div className="pie-legend-row">
           <span className="pie-swatch" style={{ background: '#7a9006' }} />
           <span className="pie-legend-label">Impostos Empregado</span>
@@ -122,6 +129,13 @@ export function TaxesPanel({ result }: TaxesPanelProps) {
           <span className="pie-legend-label">Desc. IRS</span>
           <span className="pie-legend-value">{fmt(irsDiscount)} <em>({pct(irsDiscount, companyMonthlyCost)})</em></span>
         </div>
+        {result.irsJovemDiscount !== undefined && (
+          <div className="pie-legend-row pie-legend-sub">
+            <span className="pie-swatch" />
+            <span className="pie-legend-label">Isenção IRS Jovem</span>
+            <span className="pie-legend-value">{fmt(result.irsJovemDiscount)}</span>
+          </div>
+        )}
         <div className="pie-legend-row">
           <span className="pie-swatch" style={{ background: '#700707' }} />
           <span className="pie-legend-label">Impostos Empresa</span>

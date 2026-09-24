@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { calculateSalary } from 'salario-pt'
+import { calculateSalary, type Situation } from 'salario-pt'
 import { SalaryForm } from './components/SalaryForm'
 import { ResultsPanel } from './components/ResultsPanel'
 import { TaxesPanel } from './components/TaxesPanel'
@@ -12,6 +12,10 @@ const DEFAULT_FORM: FormState = {
   year: '2026',
   location: 'continente',
   salary: 1000,
+  mealAmount: 0,
+  mealType: 'card',
+  irsJovemYear: 0,
+  duodecimos: false,
 }
 
 function formToResult(form: FormState): SalaryResult | null {
@@ -22,6 +26,9 @@ function formToResult(form: FormState): SalaryResult | null {
       year: form.year,
       location: form.location,
       salary: form.salary,
+      mealAllowance: form.mealAmount > 0 ? { dailyAmount: form.mealAmount, type: form.mealType } : undefined,
+      irsJovem: form.irsJovemYear > 0 ? { benefitYear: form.irsJovemYear } : undefined,
+      subsidies: { duodecimos: form.duodecimos },
     })
   } catch {
     return null
@@ -32,18 +39,26 @@ function readURLParams(): { left: Partial<FormState>; right: Partial<FormState> 
   const params = new URLSearchParams(window.location.search)
   return {
     left: {
-      situation: params.get('situation01') ?? undefined,
+      situation: (params.get('situation01') as Situation | null) ?? undefined,
       dependents: params.has('dependents01') ? parseInt(params.get('dependents01')!, 10) : undefined,
       year: params.get('yearLeft') ?? undefined,
       location: params.get('location01') ?? undefined,
       salary: params.has('salaryInputLeft') ? parseInt(params.get('salaryInputLeft')!, 10) : undefined,
+      mealAmount: params.has('mealAmount01') ? parseFloat(params.get('mealAmount01')!) : undefined,
+      mealType: params.get('mealType01') === 'cash' ? 'cash' : undefined,
+      irsJovemYear: params.has('irsJovem01') ? parseInt(params.get('irsJovem01')!, 10) : undefined,
+      duodecimos: params.has('duodecimos01') ? params.get('duodecimos01') === 'true' : undefined,
     },
     right: {
-      situation: params.get('situation02') ?? undefined,
+      situation: (params.get('situation02') as Situation | null) ?? undefined,
       dependents: params.has('dependents02') ? parseInt(params.get('dependents02')!, 10) : undefined,
       year: params.get('yearRight') ?? undefined,
       location: params.get('location02') ?? undefined,
       salary: params.has('salaryInputRight') ? parseInt(params.get('salaryInputRight')!, 10) : undefined,
+      mealAmount: params.has('mealAmount02') ? parseFloat(params.get('mealAmount02')!) : undefined,
+      mealType: params.get('mealType02') === 'cash' ? 'cash' : undefined,
+      irsJovemYear: params.has('irsJovem02') ? parseInt(params.get('irsJovem02')!, 10) : undefined,
+      duodecimos: params.has('duodecimos02') ? params.get('duodecimos02') === 'true' : undefined,
     },
   }
 }
@@ -55,6 +70,10 @@ function mergeWithDefaults(partial: Partial<FormState>): FormState {
     year: partial.year ?? DEFAULT_FORM.year,
     location: partial.location ?? DEFAULT_FORM.location,
     salary: partial.salary !== undefined && !isNaN(partial.salary) ? partial.salary : DEFAULT_FORM.salary,
+    mealAmount: partial.mealAmount !== undefined && !isNaN(partial.mealAmount) ? partial.mealAmount : DEFAULT_FORM.mealAmount,
+    mealType: partial.mealType ?? DEFAULT_FORM.mealType,
+    irsJovemYear: partial.irsJovemYear !== undefined && !isNaN(partial.irsJovemYear) ? partial.irsJovemYear : DEFAULT_FORM.irsJovemYear,
+    duodecimos: partial.duodecimos ?? DEFAULT_FORM.duodecimos,
   }
 }
 
@@ -83,12 +102,20 @@ export default function App() {
     params.set('location01', leftForm.location)
     params.set('salaryInputLeft', String(leftForm.salary))
     params.set('salaryRangeLeft', String(leftForm.salary))
+    params.set('mealAmount01', String(leftForm.mealAmount))
+    params.set('mealType01', leftForm.mealType)
+    params.set('irsJovem01', String(leftForm.irsJovemYear))
+    params.set('duodecimos01', String(leftForm.duodecimos))
     params.set('situation02', rightForm.situation)
     params.set('dependents02', String(rightForm.dependents))
     params.set('yearRight', rightForm.year)
     params.set('location02', rightForm.location)
     params.set('salaryInputRight', String(rightForm.salary))
     params.set('salaryRangeRight', String(rightForm.salary))
+    params.set('mealAmount02', String(rightForm.mealAmount))
+    params.set('mealType02', rightForm.mealType)
+    params.set('irsJovem02', String(rightForm.irsJovemYear))
+    params.set('duodecimos02', String(rightForm.duodecimos))
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`
   }
 

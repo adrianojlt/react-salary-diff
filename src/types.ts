@@ -1,16 +1,15 @@
+import type { Situation } from 'salario-pt'
+
+export type { SalaryResult } from 'salario-pt'
+
 export interface FormState {
-  situation: string
+  situation: Situation
   dependents: number
   year: string
   location: string
   salary: number
-}
-
-export interface SalaryResult {
-  grossSalary: number
-  netSalary: number
-  ssDiscount: number
-  irsDiscount: number
-  companyMonthlyCost: number
-  companyAnnualCost: number
+  mealAmount: number
+  mealType: 'card' | 'cash'
+  irsJovemYear: number
+  duodecimos: boolean
 }
