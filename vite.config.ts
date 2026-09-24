@@ -2,22 +2,32 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import * as fs from 'fs'
 import * as path from 'path'
+import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const LOCATIONS = ['continente', 'madeira', 'acores']
-const YEARS = ['2026', '2025', '2024_03', '2024_02', '2024', '2023']
+interface TableInfo {
+  location: string
+  year: string
+  file: string
+}
+
+const dataDir = path.resolve(__dirname, 'node_modules/salario-pt/data')
+const manifestPath = path.join(dataDir, 'manifest.json')
+if (!fs.existsSync(manifestPath)) {
+  throw new Error(`salario-pt manifest not found: ${manifestPath}`)
+}
+const TABLES: TableInfo[] = JSON.parse(fs.readFileSync(manifestPath, 'utf-8')).tables
+const LOCATIONS = [...new Set(TABLES.map(table => table.location))]
+const YEARS = [...new Set(TABLES.map(table => table.year))]
 const csvData: Record<string, string> = {}
 
-for (const location of LOCATIONS) {
-  for (const year of YEARS) {
-    const filePath = path.resolve(__dirname, 'node_modules/salario-pt/data', `taxas_${location}_${year}.csv`)
-    try {
-      csvData[`${location}_${year}`] = fs.readFileSync(filePath, 'utf-8')
-    } catch {
-      csvData[`${location}_${year}`] = ''
-    }
+for (const table of TABLES) {
+  const filePath = path.join(dataDir, table.file)
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`salario-pt table listed in manifest not found: ${filePath}`)
   }
+  csvData[`${table.location}_${table.year}`] = fs.readFileSync(filePath, 'utf-8')
 }
 
 const tablesShim = `
@@ -25,6 +35,7 @@ const Papa = require('papaparse');
 const CSV_DATA = ${JSON.stringify(csvData)};
 const LOCATIONS = ${JSON.stringify(LOCATIONS)};
 const YEARS = ${JSON.stringify(YEARS)};
+const TABLES = ${JSON.stringify(TABLES)};
 let cachedTables = null;
 function loadTables(location, year) {
   if (!cachedTables) {
@@ -42,7 +53,7 @@ function loadTables(location, year) {
   cachedTables[key] = results.data;
   return cachedTables[key];
 }
-module.exports = { loadTables, LOCATIONS, YEARS };
+module.exports = { loadTables, LOCATIONS, YEARS, TABLES };
 `
 
 export default defineConfig({

@@ -1,3 +1,4 @@
+import { TABLES } from 'salario-pt'
 import type { FormState } from '../types'
 
 interface SalaryFormProps {
@@ -6,14 +7,8 @@ interface SalaryFormProps {
   onChange: (form: FormState) => void
 }
 
-const YEAR_OPTIONS = [
-  { value: '2026', label: '2026' },
-  { value: '2025', label: '2025' },
-  { value: '2024_03', label: '2024 11-12' },
-  { value: '2024_02', label: '2024 09-10' },
-  { value: '2024', label: '2024' },
-  { value: '2023', label: '2023' },
-]
+const YEAR_OPTIONS = [...new Map(TABLES.map(table => [table.year, table.label]))]
+  .map(([value, label]) => ({ value, label }))
 
 const SITUATION_OPTIONS = [
   { value: 'NotMarried', label: 'Não Casado' },

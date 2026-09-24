@@ -16,5 +16,17 @@ declare module 'salario-pt' {
     companyAnnualCost: number
   }
 
+  interface TableInfo {
+    location: string
+    year: string
+    label: string
+    validFrom: string
+    file: string
+    sha256: string
+  }
+
   export function calculateSalary(input: SalaryInput): SalaryOutput
+  export const LOCATIONS: string[]
+  export const YEARS: string[]
+  export const TABLES: TableInfo[]
 }
